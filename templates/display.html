@@ -30,10 +30,10 @@
         <br>
     </div>
     <div>
-        <form action="/recipe_submission" method="POST" name="changeform" class="changeingform" id="changeiform">
+        <form action="/" method="POST" name="changeform" class="changeingform" id="changeiform">
             <h2>Select the ingredients you don't have or want to substitute out:</h2>
             <fieldset>
-                {{ final_output|safe }}
+                {{ checklist|safe }}
             </fieldset>
         </form>
     </div>
