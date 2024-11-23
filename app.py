@@ -86,9 +86,9 @@ def recipe_submission():
     label_start = '<label><input type="checkbox" name="'
     label_end = '</label>'
     final_output = ""
-    for ingre in ingredients_list_no_format:
-        no_space = "".join(ingre.split(" "))
-        final_output = final_output + label_start + no_space + '">' + ingre + label_end
+    name = "ingredient"
+    for ind, ingre in enumerate(ingredients_list_no_format):
+        final_output = final_output + label_start + name + str(ind) + '">' + ingre + label_end
 
     return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe, checklist=final_output)
 
