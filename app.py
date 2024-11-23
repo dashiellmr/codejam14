@@ -2,7 +2,6 @@ from openai import OpenAI
 from flask import Flask, request, jsonify, render_template
 import cloudscraper
 from bs4 import BeautifulSoup
-import requests as req
 from dotenv import load_dotenv
 import os
 import re
@@ -13,16 +12,35 @@ app = Flask(__name__)
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.route("/")
-def index():
+def render_home():
     return render_template("form.html")
 
 @app.route("/recipe_submission", methods=["POST"])
 def recipe_submission():
-    form_data = request.get_json()
+    
+    recipe_url = request.form.get("recipeLink")
+    number_of_people = request.form.get("servings")
+    dietary_restrictions = []
+    if request.form.get('nutAllergy') == "on":
+        dietary_restrictions.append("Nut Allergy")
+    if request.form.get('glutenFree') == "on":
+        dietary_restrictions.append("Gluten Free")
+    if request.form.get('lactoseFree') == "on":
+        dietary_restrictions.append("Lactose Free")
+    if request.form.get('vegetarian') == "on":
+        dietary_restrictions.append("Vegetarian")
+    if request.form.get('vegan') == "on":
+        dietary_restrictions.append("Vegan")
 
-    recipe_url = form_data.get('url', '')
-    number_of_people = form_data.get('number_of_people', '')
-    dietary_restrictions = form_data.get('dietary_restrictions', [])
+    print(recipe_url)
+    print(number_of_people)
+
+    if "otherAllergy" in request.form:
+        other_allergy = request.form.get('otherAllergyText', '').strip()
+        if other_allergy:
+            dietary_restrictions.append(other_allergy)
+
+    print(dietary_restrictions)
     
     website_data = cloudscraper.create_scraper().get(recipe_url).text
     soup = BeautifulSoup(website_data, "html.parser")

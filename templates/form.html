@@ -11,14 +11,15 @@
             otherInput.disabled = !otherCheckbox.checked;
         }
 
-        async function handleSubmit(event) {
+        function handleSubmit(event) {
+            event.preventDefault();
 
             const form = document.forms['mainform'];
             const recipeLink = form['recipeLink'].value;
             const servings = form['servings'].value;
 
-            console.log(recipeLink);
-            console.log(servings);
+            console.log("Recipe Link:", recipeLink);
+            console.log("Number of People:", servings);
 
             const dietaryRestrictions = [];
             form.querySelectorAll('input[type="checkbox"]:checked').forEach((checkbox) => {
@@ -29,35 +30,12 @@
                 }
             });
 
-            console.log(dietaryRestrictions);
-
-            const payload = {
-                url: recipeLink,
-                number_of_people: servings,
-                dietary_restrictions: dietaryRestrictions,
-            };
-
-            try {
-                const response = await fetch('/recipe_submission', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload),
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const result = await response.json();
-                console.log('Server Response:', result);
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            console.log("Dietary Restrictions:", dietaryRestrictions);
         }
     </script>
 </head>
 <body>
-    <form method="post" name="mainform" class="recipeForm" onsubmit="handleSubmit(event)">
+    <form action="/recipe_submission" method="POST" name="mainform" class="recipeForm">
         <div>
             <label for="recipeLink">Recipe Link</label>
             <input type="text" id="recipeLink" name="recipeLink" placeholder="Website URL" required>
