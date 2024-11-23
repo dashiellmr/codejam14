@@ -82,5 +82,9 @@ def recipe_submission():
 
     return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe)
 
+@app.route("/change_recipe")
+def change_recipe():
+    return render_template("change.html")
+
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
