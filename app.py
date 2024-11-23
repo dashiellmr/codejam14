@@ -90,7 +90,13 @@ def recipe_submission():
     for ind, ingre in enumerate(ingredients_list_no_format):
         final_output = final_output + label_start + name + str(ind) + '">' + ingre + label_end
 
-    return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe, checklist=final_output)
+    save_ingredient_values = '<input type="text" id="ingredientshtml" name="ingredientshtml" value="' + ingredients_list + '">'
+    save_instruction_values = '<input type="text" id="ingredientshtml" name="ingredientshtml" value="' + instructions_list + '">'
+
+    print(save_ingredient_values)
+    print(save_instruction_values)
+
+    return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe, checklist=final_output, save_ingredients=save_ingredient_values, save_instructions=save_instruction_values)
 
 @app.route("/change_recipe")
 def change_recipe():

@@ -41,7 +41,10 @@
                     {{ checklist|safe }}
                 </fieldset>
             </div>
-            <br>
+            <div style="visibility: hidden;">
+                {{ save_ingredients|safe }}
+                {{ save_instructions|safe }}
+            </div>
             <div>
                 <input type="submit" value="Get New Recipe">
             </div>
