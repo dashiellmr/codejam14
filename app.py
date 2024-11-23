@@ -57,11 +57,11 @@ def recipe_submission():
             [
                 {
                     "role": "system",
-                    "content": "",
+                    "content": "You're a chef and here is a recipe that you need to modify. You need to remove the following ingredients: " + unwanted_ingredients + ". You also need to adjust the recipe to serve " + serving_size + " people. Please make the necessary changes to the recipe. Thank you! " + ingredients_html + instructions_html,
                 },
                 {
                     "role": "user",
-                    "content": "",
+                    "content": "Please produce a recipe according to the above guidelines. Please put it in the format of a recipe card. Please don't write anything except the recipe and the instructions. Thank you!",
                 },
             ],
         )   
@@ -146,8 +146,6 @@ def recipe_submission():
     save_ingredient_values = '<input type="text" id="ingredientshtml" name="ingredientshtml" value="' + ingredients_list + '">'
     save_instruction_values = '<input type="text" id="instructionshtml" name="instructionshtml" value="' + instructions_list + '">'
     serving_size = '<input type="number" id="servings" name="servings" min="1" value="' + str(number_of_people) + '">'
-
-    print(serving_size)
 
     return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe, checklist=final_output, save_ingredients=save_ingredient_values, save_instructions=save_instruction_values, serving=serving_size)
 
