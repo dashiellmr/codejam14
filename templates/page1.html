@@ -3,10 +3,76 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="./output.css" rel="stylesheet">
         <title>mochipe</title>
     </head>
 
-    <body style="margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh;">
-        <img src="dango0.png" alt="Image 1" style="max-width: 100%; max-height: 100%;">
+    <style>
+        #loading-container img {
+            max-width: 150px;
+            max-height: 150px;
+            display: none; /* Initially hide all images */
+        }
+        #loading-container img.active {
+            display:block;
+        }
+
+        #page-container.fade-out {
+            animation: fadeOut 1s forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+    </style>
+
+    <body style="background-color: rgb(255, 248, 238);">
+        <div id="page-container">
+            <div id="loading-container" style="margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh;">
+                <img src="/Users/anniehuang/Documents/GitHub/codejam14/codejam14/static/dango0.png" alt="Step 1" style="width:60px" class="active">
+                <img src="/Users/anniehuang/Documents/GitHub/codejam14/codejam14/static/dango1.png" alt="Step 2" style="width:60px">
+                <img src="/Users/anniehuang/Documents/GitHub/codejam14/codejam14/static/dango2.png" alt="Step 3" style="width:60px">
+                <img src="/Users/anniehuang/Documents/GitHub/codejam14/codejam14/static/dango3.png" alt="Step 4" style="width:60px">
+            </div>
+        </div>
+        
+        <script>
+            function startLoadingScreen() {
+                const images = document.querySelectorAll("#loading-container img");
+                const totalImages = images.length;
+                let currentIndex = 0;
+                let loops = 0;
+                const maxLoops = 2;
+
+                function switchImage() {
+                    images[currentIndex].classList.remove("active");
+                    currentIndex = (currentIndex + 1) % totalImages;
+                    images[currentIndex].classList.add("active");
+
+                    if (currentIndex === 0) {
+                    loops++;
+                    if (loops >= maxLoops) {
+                        const pageContainer = document.getElementById("page-container");
+                        pageContainer.classList.add("fade-out");
+
+                        setTimeout(() => {
+                            window.location.href = "/Users/anniehuang/Documents/GitHub/codejam14/codejam14/templates/form.html";
+                            
+                        }, 1000);
+                    }
+                    }
+                }
+                const loadingInterval = setInterval(switchImage, 500);
+                }
+
+            // Trigger the function on page load
+            window.onload = startLoadingScreen;
+        </script>
     </body>
 </html>
