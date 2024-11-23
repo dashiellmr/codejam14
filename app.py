@@ -28,6 +28,29 @@ def render_home():
 def recipe_submission():
     
     if not request.form.get("recipeLink"):
+        ingredients_html = request.form.get("ingredientshtml")
+        soup = BeautifulSoup(ingredients_html, "html.parser")
+        ingredients_list_notformed = [li.get_text(strip=True) for li in soup.find_all("li")]
+
+        instructions_html = request.form.get("instructionshtml")
+        serving_size = request.form.get("servings")
+        unwanted_ingredients = []
+
+        for i, ingreds in ingredients_list_notformed:
+            if request.form.get('ingredient' + str(i)) == "on":
+                unwanted_ingredients.append(ingreds)
+
+        unwanted_ingredients = ", ".join(unwanted_ingredients)
+
+        print(ingredients_html)
+        print("\n")
+        print(unwanted_ingredients)
+        print("\n")
+        print(instructions_html)
+        print("\n")
+        print(serving_size)
+
+
         response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=
@@ -75,15 +98,10 @@ def recipe_submission():
     if request.form.get('vegan') == "on":
         dietary_restrictions.append("Vegan")
 
-    print(f"Recipe URL: {recipe_url}")
-    print(f"Number of Servings: {number_of_people}")
-
     if "otherAllergy" in request.form:
         other_allergy = request.form.get('otherAllergyText', '').strip()
         if other_allergy:
             dietary_restrictions.append(other_allergy)
-
-    print(dietary_restrictions)
     
     website_data = cloudscraper.create_scraper().get(recipe_url).text
     soup = BeautifulSoup(website_data, "html.parser")
@@ -126,12 +144,10 @@ def recipe_submission():
         final_output = final_output + label_start + name + str(ind) + '">' + ingre + label_end
 
     save_ingredient_values = '<input type="text" id="ingredientshtml" name="ingredientshtml" value="' + ingredients_list + '">'
-    save_instruction_values = '<input type="text" id="ingredientshtml" name="ingredientshtml" value="' + instructions_list + '">'
+    save_instruction_values = '<input type="text" id="instructionshtml" name="instructionshtml" value="' + instructions_list + '">'
+    serving_size = '<input type="number" id="servings" name="servings" min="1" value="' + str(number_of_people) + '">'
 
-    print(save_ingredient_values)
-    print(save_instruction_values)
-
-    return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe, checklist=final_output, save_ingredients=save_ingredient_values, save_instructions=save_instruction_values)
+    return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe, checklist=final_output, save_ingredients=save_ingredient_values, save_instructions=save_instruction_values, serving=serving_size)
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
