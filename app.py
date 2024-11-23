@@ -63,4 +63,6 @@ def recipe_submission():
             },
         ],
     )
-    return jsonify(response.choices[0].message.content)
+
+    json_obj = jsonify(response.choices[0].message.content)
+    return render_template("display.html", json_obj=json_obj)
