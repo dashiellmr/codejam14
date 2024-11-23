@@ -1,5 +1,5 @@
 from openai import OpenAI
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import cloudscraper
 from bs4 import BeautifulSoup
 import requests as req
@@ -12,16 +12,18 @@ load_dotenv()
 app = Flask(__name__)
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+@app.route("/")
+def index():
+    return render_template("form.html")
 
 @app.route("/recipe_submission", methods=["POST"])
 def recipe_submission():
     form_data = request.get_json()
-    recipe_url = form_data["url"]
 
-    dietary_restrictions, number_of_people = (
-        form_data["dietary_restrictions"],
-        form_data["number_of_people"],
-    )
+    recipe_url = form_data.get('url', '')
+    number_of_people = form_data.get('number_of_people', '')
+    dietary_restrictions = form_data.get('dietary_restrictions', [])
+    
     website_data = cloudscraper.create_scraper().get(recipe_url).text
     soup = BeautifulSoup(website_data, "html.parser")
     ingredients, instructions = soup.find(
