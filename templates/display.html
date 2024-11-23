@@ -5,22 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./output.css" rel="stylesheet">
     <title>Recipe</title>
+
+    <style>
+        .changeingform {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <div>
-        <h2>{{ name|safe }}</h2>
+    <div class="outer" id="outercontain">
+        <div>
+            <h2>{{ name|safe }}</h2>
+        </div>
+        <div>
+            <ul>
+                {{ ingredients|safe }}
+            </ul>
+        </div>
+        <div>
+            <ol>
+                {{ instructions|safe }}
+            </ol>
+        </div>
+        <br>
     </div>
     <div>
-        <ul>
-            {{ ingredients|safe }}
-        </ul>
+        <form action="/recipe_submission" method="POST" name="changeform" class="changeingform" id="changeiform">
+            <h2>Select the ingredients you don't have or want to substitute out:</h2>
+            <fieldset>
+                {{ final_output|safe }}
+            </fieldset>
+        </form>
     </div>
-    <div>
-        <ol>
-            {{ instructions|safe }}
-        </ol>
-    </div>
-    <br>
-    <a href="change_recipe">Edit Ingredients and Serving Size</a> 
+    <button onclick="selectIngredients()">Edit Ingredients and Serving Size</button>
+    <script>
+        function selectIngredients() {
+            document.getElementById("changeiform").style.display = "block";
+            document.getElementById("outercontain").style.display = "none";
+        }
+    </script>
 </body>
 </html>

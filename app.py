@@ -80,7 +80,17 @@ def recipe_submission():
     name_of_recipe = formatted_html.split("\n")[0]
     name_of_recipe = re.sub(r"<[^>]+>", "", name_of_recipe)
 
-    return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe)
+    soup = BeautifulSoup(ingredients_list, "html.parser")
+    ingredients_list_no_format = [li.get_text(strip=True) for li in soup.find_all("li")]
+
+    label_start = '<label><input type="checkbox" name="'
+    label_end = '</label>'
+    final_output = ""
+    for ingre in ingredients_list_no_format:
+        no_space = "".join(ingre.split(" "))
+        final_output = final_output + label_start + no_space + '">' + ingre + label_end
+
+    return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe, checklist=final_output)
 
 @app.route("/change_recipe")
 def change_recipe():
