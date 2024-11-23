@@ -12,7 +12,6 @@ client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 @app.route('/')
 def home():
-    # Serve the form.html file
     return render_template('form.html')
 
 @app.route('/recipe_submission', methods=['POST'])
