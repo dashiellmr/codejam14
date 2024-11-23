@@ -75,3 +75,6 @@ def recipe_submission():
 
     gpt_response = response.choices[0].message.content
     return render_template("display.html", json_obj=marko.convert(gpt_response))
+
+if __name__ == "__main__":
+    app.run(debug=True, port=8080)
