@@ -13,9 +13,16 @@ client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 @app.route('/recipe_submission', methods=['POST'])
 def recipe_submission():
     data = request.get_json()
-    req.get(data['url'])
-    dietary_restrictions, number_of_people = data['dietary_restrictions'], data['number_of_people']
-    website_data = BeautifulSoup(data['url'], 'html.parser')
+
+    recipe_link = data.get('url', '')
+    dietary_restrictions = data.get('dietary_restrictions', [])
+    number_of_people = data.get('number_of_people', '')
+
+    print("Recipe Link:", recipe_link)
+    print("Dietary Restrictions:", dietary_restrictions)
+    print("Number of People:", number_of_people)
+
+    website_data = BeautifulSoup(recipe_link, 'html.parser')
     
     response = client.chat.completions.create(
         model="gpt-4o-mini",        

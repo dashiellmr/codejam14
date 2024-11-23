@@ -10,10 +10,40 @@
             const otherInput = document.getElementById('otherInput');
             otherInput.disabled = !otherCheckbox.checked;
         }
+
+        async function handleSubmit(event) {
+
+            const form = document.forms['mainform'];
+            const recipeLink = form['recipeLink'].value;
+            const servings = form['servings'].value;
+
+            const dietaryRestrictions = [];
+            form.querySelectorAll('input[type="checkbox"]:checked').forEach((checkbox) => {
+                if (checkbox.name === 'otherAllergy' && form['otherAllergyText'].value) {
+                    dietaryRestrictions.push(form['otherAllergyText'].value);
+                } else if (checkbox.name !== 'otherAllergy') {
+                    dietaryRestrictions.push(checkbox.nextSibling.nodeValue.trim());
+                }
+            });
+
+            const payload = {
+                url: recipeLink,
+                number_of_people: servings,
+                dietary_restrictions: dietaryRestrictions,
+            };
+
+            const response = await fetch('/recipe_submission', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            const result = await response.json();
+        }
     </script>
 </head>
 <body>
-    <form action="" method="post" name="mainform" class="recipeForm">
+    <form method="post" name="mainform" class="recipeForm" onsubmit="handleSubmit(event)">
         <div>
             <label for="recipeLink">Recipe Link</label>
             <input type="text" id="recipeLink" name="recipeLink" placeholder="Website URL" required>
