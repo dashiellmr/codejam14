@@ -31,17 +31,28 @@
     </div>
     <div>
         <form action="/" method="POST" name="changeform" class="changeingform" id="changeiform">
-            <h2>Select the ingredients you don't have or want to substitute out:</h2>
-            <fieldset>
-                {{ checklist|safe }}
-            </fieldset>
+            <div>
+                <label for="servings">Change the number of servings:</label>
+                <input type="number" id="servings" name="servings" min="1" required>
+            </div>
+            <div>
+                <h2>Select the ingredients you don't have or want to substitute out:</h2>
+                <fieldset>
+                    {{ checklist|safe }}
+                </fieldset>
+            </div>
+            <br>
+            <div>
+                <input type="submit" value="Get New Recipe">
+            </div>
         </form>
     </div>
-    <button onclick="selectIngredients()">Edit Ingredients and Serving Size</button>
+    <button onclick="selectIngredients()" id="change">Edit Ingredients and Serving Size</button>
     <script>
         function selectIngredients() {
             document.getElementById("changeiform").style.display = "block";
             document.getElementById("outercontain").style.display = "none";
+            document.getElementById("change").style.display = "none";
         }
     </script>
 </body>
