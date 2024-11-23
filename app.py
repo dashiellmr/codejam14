@@ -79,12 +79,16 @@ def recipe_submission():
         label_end = '</label>'
         final_output = ""
         name = "ingredient"
-        for ind, ingre in enumerate(ingredients_list_no_format):
-            final_output = final_output + label_start + name + str(ind) + '">' + ingre + label_end
+        for i, ingre in enumerate(ingredients_list_no_format):
+            a = f'<label for="ingredient{i}" class="hover:text-gray-500 p-4 rounded-lg bg-green max-w-fit border-2 border-gray-700 inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id="label{i}" onclick="toggleStrikeThrough(\'label{i}\')">
+<input type="checkbox" name="ingredient{i}" class="hidden">{ingre}</label>'
+
+            final_output = final_output + a
     
         save_ingredient_values = '<input type="text" id="ingredientshtml" name="ingredientshtml" value="' + ingredients_list + '">'
         save_instruction_values = '<input type="text" id="instructionshtml" name="instructionshtml" value="' + instructions_list + '">'
-        serving_size = '<input type="number" id="servings" name="servings" min="1" value="' + str(serving_size) + '">'
+        serving_size = str(serving_size)
+        serving_size = f'<input class="bg-green border-2 p-4 mb-6 border-black rounded-lg" type="number" id="servings" name="servings" min="1" placeholder="number of servings" value="{serving_size}" required>'
     
         return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe, checklist=final_output, save_ingredients=save_ingredient_values, save_instructions=save_instruction_values, serving=serving_size)
     
