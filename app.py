@@ -27,9 +27,43 @@ def render_home():
 @app.route("/recipe_submission", methods=["POST"])
 def recipe_submission():
     
+    if not request.form.get("recipeLink"):
+        response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=
+            [
+                {
+                    "role": "system",
+                    "content": "",
+                },
+                {
+                    "role": "user",
+                    "content": "",
+                },
+            ],
+        )   
+        gpt_response = response.choices[0].message.content
+        formatted_html = marko.convert(gpt_response)
+        ingredients_list = formatted_html.split("<ul>")[1].split("</ul>")[0]
+        instructions_list = formatted_html.split("<ol>")[1].split("</ol>")[0]
+        name_of_recipe = formatted_html.split("\n")[0]
+        name_of_recipe = re.sub(r"<[^>]+>", "", name_of_recipe)
+
+        soup = BeautifulSoup(ingredients_list, "html.parser")
+        ingredients_list_no_format = [li.get_text(strip=True) for li in soup.find_all("li")]
+
+        label_start = '<label><input type="checkbox" name="'
+        label_end = '</label>'
+        final_output = ""
+        name = "ingredient"
+        for ind, ingre in enumerate(ingredients_list_no_format):
+            final_output = final_output + label_start + name + str(ind) + '">' + ingre + label_end
+        return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe, checklist=final_output)
+    
     recipe_url = request.form.get("recipeLink")
     number_of_people = request.form.get("servings")
     dietary_restrictions = []
+    
     if request.form.get('nutAllergy') == "on":
         dietary_restrictions.append("Nut Allergy")
     if request.form.get('glutenFree') == "on":
@@ -41,8 +75,8 @@ def recipe_submission():
     if request.form.get('vegan') == "on":
         dietary_restrictions.append("Vegan")
 
-    print(recipe_url)
-    print(number_of_people)
+    print(f"Recipe URL: {recipe_url}")
+    print(f"Number of Servings: {number_of_people}")
 
     if "otherAllergy" in request.form:
         other_allergy = request.form.get('otherAllergyText', '').strip()
@@ -87,6 +121,7 @@ def recipe_submission():
     label_end = '</label>'
     final_output = ""
     name = "ingredient"
+    
     for ind, ingre in enumerate(ingredients_list_no_format):
         final_output = final_output + label_start + name + str(ind) + '">' + ingre + label_end
 
@@ -97,10 +132,6 @@ def recipe_submission():
     print(save_instruction_values)
 
     return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe, checklist=final_output, save_ingredients=save_ingredient_values, save_instructions=save_instruction_values)
-
-@app.route("/change_recipe")
-def change_recipe():
-    return render_template("change.html")
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
