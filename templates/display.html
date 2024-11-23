@@ -1,28 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="./output.css" rel="stylesheet">
-        <title>mochipe</title> 
-        <style>
-            #corner-image {
-                position: fixed; /* Keeps the image fixed in the corner even when scrolling */
-                bottom: 30px; /* Distance from the bottom of the page */
-                right: 40px; /* Distance from the right of the page */
-                width: 50px; /* Adjust the width of the image */
-                height: auto; /* Maintain aspect ratio */
-                z-index: 1000; /* Ensure it stays on top of other elements */
-            }
-        </style>
-    </head>
-    <body>
-        <div>
-            <h1>temp recipe title</h1> <!-- need to inspect the recipe's webpage and take from their header line to get recipe name -->
-            <h4>ingredients</h4>
-        </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./static/output.css" rel="stylesheet">
+    <title>Recipe</title>
 
-        <img id="corner-image" src="/Users/anniehuang/Documents/GitHub/codejam14/codejam14/static/dango3.png" alt="Corner Image">
-        
-    </body>
+    <style>
+        .changeingform {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="outer" id="outercontain">
+        <div>
+            <h2>{{ name|safe }}</h2>
+        </div>
+        <div>
+            <ul>
+                {{ ingredients|safe }}
+            </ul>
+        </div>
+        <div>
+            <ol>
+                {{ instructions|safe }}
+            </ol>
+        </div>
+        <br>
+    </div>
+    <div>
+        <form action="/recipe_submission" method="POST" name="changeform" class="changeingform" id="changeiform">
+            <div>
+                <label for="servings">Change the number of servings:</label>
+                {{ serving|safe }}
+            </div>
+            <div>
+                <h2>Select the ingredients you don't have or want to substitute out:</h2>
+                <fieldset>
+                    {{ checklist|safe }}
+                </fieldset>
+            </div>
+            <div style="visibility: hidden;">
+                {{ save_ingredients|safe }}
+                {{ save_instructions|safe }}
+            </div>
+            <div>
+                <input type="submit" value="Get New Recipe">
+            </div>
+        </form>
+    </div>
+    <button onclick="selectIngredients()" id="change">Edit Ingredients and Serving Size</button>
+    <div>
+    <a href="/">Input Another Recipe</a>
+    </div>
+    <br>
+    <script>
+        function selectIngredients() {
+            document.getElementById("changeiform").style.display = "block";
+            document.getElementById("outercontain").style.display = "none";
+            document.getElementById("change").style.display = "none";
+        }
+    </script>
+</body>
 </html>
