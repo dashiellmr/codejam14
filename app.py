@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import os
 import re
+from json import dumps
+import marko
 
 load_dotenv()
 
@@ -59,10 +61,10 @@ def recipe_submission():
             },
             {
                 "role": "user",
-                "content": "Please produce a recipe according to the above guidelines. Please put it in the format of a recipe card.",
+                "content": "Please produce a recipe according to the above guidelines. Please put it in the format of a recipe card. Please don't write anything except the recipe and the instructions. Thank you!",
             },
         ],
     )
 
-    json_obj = jsonify(response.choices[0].message.content)
-    return render_template("display.html", json_obj=json_obj)
+    gpt_response = response.choices[0].message.content
+    return render_template("display.html", json_obj=marko.convert(gpt_response))
