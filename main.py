@@ -1,5 +1,5 @@
 from openai import OpenAI
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from bs4 import BeautifulSoup
 import requests as req
 from dotenv import load_dotenv
@@ -9,6 +9,13 @@ load_dotenv()
 
 app = Flask(__name__)
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
+@app.route('/')
+def home():
+    # Serve the form.html file
+    return render_template('form.html')
+
+@app.route('/recipe_submission', methods=['POST'])
 
 @app.route('/recipe_submission', methods=['POST'])
 def recipe_submission():

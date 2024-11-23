@@ -17,6 +17,9 @@
             const recipeLink = form['recipeLink'].value;
             const servings = form['servings'].value;
 
+            console.log(recipeLink);
+            console.log(servings);
+
             const dietaryRestrictions = [];
             form.querySelectorAll('input[type="checkbox"]:checked').forEach((checkbox) => {
                 if (checkbox.name === 'otherAllergy' && form['otherAllergyText'].value) {
@@ -26,19 +29,30 @@
                 }
             });
 
+            console.log(dietaryRestrictions);
+
             const payload = {
                 url: recipeLink,
                 number_of_people: servings,
                 dietary_restrictions: dietaryRestrictions,
             };
 
-            const response = await fetch('/recipe_submission', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
+            try {
+                const response = await fetch('/recipe_submission', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
 
-            const result = await response.json();
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Server Response:', result);
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
     </script>
 </head>
