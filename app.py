@@ -36,7 +36,7 @@ def recipe_submission():
         serving_size = request.form.get("servings")
         unwanted_ingredients = []
 
-        for i, ingreds in ingredients_list_notformed:
+        for i, ingreds in enumerate(ingredients_list_notformed):
             if request.form.get('ingredient' + str(i)) == "on":
                 unwanted_ingredients.append(ingreds)
 
@@ -146,6 +146,8 @@ def recipe_submission():
     save_ingredient_values = '<input type="text" id="ingredientshtml" name="ingredientshtml" value="' + ingredients_list + '">'
     save_instruction_values = '<input type="text" id="instructionshtml" name="instructionshtml" value="' + instructions_list + '">'
     serving_size = '<input type="number" id="servings" name="servings" min="1" value="' + str(number_of_people) + '">'
+
+    print(serving_size)
 
     return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe, checklist=final_output, save_ingredients=save_ingredient_values, save_instructions=save_instruction_values, serving=serving_size)
 
