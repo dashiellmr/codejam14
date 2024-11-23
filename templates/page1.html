@@ -5,32 +5,31 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="./output.css" rel="stylesheet">
         <title>mochipe</title>
+        <style>
+            #loading-container img {
+                max-width: 150px;
+                max-height: 150px;
+                display: none; /* Initially hide all images */
+            }
+            #loading-container img.active {
+                display:block;
+            }
+    
+            #page-container.fade-out {
+                animation: fadeOut 1s forwards;
+            }
+    
+            @keyframes fadeOut {
+                from {
+                    opacity: 1;
+                }
+                to {
+                    opacity: 0;
+                }
+            }
+    
+        </style>
     </head>
-
-    <style>
-        #loading-container img {
-            max-width: 150px;
-            max-height: 150px;
-            display: none; /* Initially hide all images */
-        }
-        #loading-container img.active {
-            display:block;
-        }
-
-        #page-container.fade-out {
-            animation: fadeOut 1s forwards;
-        }
-
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-            }
-            to {
-                opacity: 0;
-            }
-        }
-
-    </style>
 
     <body style="background-color: rgb(255, 248, 238);">
         <div id="page-container">
