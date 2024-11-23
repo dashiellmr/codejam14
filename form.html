@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Form</title>
+    <script>
+        function toggleOtherInput() {
+            const otherCheckbox = document.getElementById('otherCheckbox');
+            const otherInput = document.getElementById('otherInput');
+            otherInput.disabled = !otherCheckbox.checked;
+        }
+    </script>
+</head>
+<body>
+    <form action="" method="post" name="mainform" class="recipeForm">
+        <div>
+            <label for="recipeLink">Recipe Link</label>
+            <input type="text" id="recipeLink" name="recipeLink" placeholder="Website URL" required>
+        </div>
+        <br>
+        <div>
+            <label for="servings">Number of People</label>
+            <input type="number" id="servings" name="servings" min="1" required>
+        </div>
+        <br>
+        <fieldset>
+            <legend>Food Restrictions</legend>
+            <label><input type="checkbox" name="nutAllergy"> Nut Allergy</label>
+            <label><input type="checkbox" name="glutenFree"> Gluten Free</label>
+            <label><input type="checkbox" name="lactoseFree"> Lactose Free</label>
+            <label><input type="checkbox" name="vegetarian"> Vegetarian</label>
+            <label><input type="checkbox" name="vegan"> Vegan</label>
+            <label>
+                <input type="checkbox" id="otherCheckbox" name="otherAllergy" onclick="toggleOtherInput()"> Other
+            </label>
+            <input type="text" id="otherInput" name="otherAllergyText" placeholder="Other Restrictions" disabled>
+        </fieldset>
+        <br>
+        <div>
+            <input type="submit" value="Get Recipe">
+        </div>
+    </form>
+</body>
+</html>
