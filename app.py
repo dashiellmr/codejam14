@@ -1,12 +1,19 @@
-from openai import OpenAI
-from flask import Flask, request, jsonify, render_template
-import cloudscraper
-from bs4 import BeautifulSoup
-from dotenv import load_dotenv
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import os
 import re
-from json import dumps
+
+import cloudscraper
 import marko
+from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+from flask import Flask
+from flask import jsonify
+from flask import render_template
+from flask import request
+from openai import OpenAI
 
 load_dotenv()
 
