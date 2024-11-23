@@ -7,6 +7,22 @@
     <title>Recipe</title>
 </head>
 <body>
-    {{ json_obj|safe }}
+    <div>
+        <h2>{{ name|safe }}</h2>
+    </div>
+    <div>
+        <ul>
+            {{ ingredients|safe }}
+        </ul>
+    </div>
+    <div>
+        <ol>
+            {{ instructions|safe }}
+        </ol>
+    </div>
+    <br>
+    <a href="change.html">Edit Ingredients and Serving Size</a> 
+
+    
 </body>
 </html>
