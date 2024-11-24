@@ -3,13 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./static/output.css" rel="stylesheet">
+    <link href="../static/output.css" rel="stylesheet">
     <title>Recipe Form</title>
+    <style>
+    </style>
     <script>
         function toggleOtherInput() {
-            const otherCheckbox = document.getElementById('otherCheckbox');
-            const otherInput = document.getElementById('otherInput');
-            otherInput.disabled = !otherCheckbox.checked;
+            if (window.getComputedStyle(document.getElementById("otherInput")).display == "none") {
+                const otherCheckbox = document.getElementById('otherCheckbox');
+                const otherInput = document.getElementById('otherInput');
+                document.getElementById('otherInput').style.display = "inline"
+                otherInput.disabled = !otherCheckbox.checked;
+            }
+            else {
+                document.getElementById('otherInput').style.display = "none"
+            }
         }
 
         function handleSubmit(event) {
@@ -35,34 +43,98 @@
         }
     </script>
 </head>
-<body>
+<body class="bg-beige">
+    <center class="m-5">
+        <h1 class = "font-bold text-7xl p-10">
+            dangogo
+        </h1>
+    </center>
     <form action="/recipe_submission" method="POST" name="mainform" class="recipeForm">
-        <div>
-            <label for="recipeLink">Recipe Link</label>
-            <input type="text" id="recipeLink" name="recipeLink" placeholder="Website URL" required>
+        <div class = " grid place-items-center">
+            <div class="bg-pink m-4 w-7/12 rounded-md ">
+                <label for="recipeURLInput" class="relative block overflow-hidden rounded-md border border-none px-3 pt-3 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+                <input type="text" class="peer h-8 w-full border-none bg-pink p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+                id="recipeURLInput" name="recipeLink" placeholder="" autocomplete="off" required>
+                <span class="bg-pink absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
+                    recipe url
+                </span>
+                </label>
+            </div>
+            <!-- <label for="recipeLink"></label>
+            <input class="bg-pink p-2 rounded-md"type="text" id="recipeLink" name="recipeLink" placeholder="insert recipe link" required>
+        -->
         </div>
         <br>
-        <div>
-            <label for="servings">Number of People</label>
-            <input type="number" id="servings" name="servings" min="1" required>
+        <div class =" grid place-items-center">
+            <fieldset class=" w-7/12 ">
+                <legend class="font-bold">dietary restrictions</legend>
+                <br>
+
+                <ul class="grid grid-cols-3 gap-6">
+                    <li>
+                        <input id="nut" type="checkbox" name="nutAllergy" class="peer hidden">
+                        <label for="nut" class="inline-table w-full bg-lightergreen hover:bg-green p-2 rounded-md border-2 border-transparent peer-checked:bg-green peer-checked:border-solid peer-checked:border-black">
+                            nut free
+                        </label>
+                    </li>
+
+                    <li>
+                        <input id="gf" type="checkbox" name="glutenFree" class="peer hidden"> 
+                        <label for="gf" class="inline-table w-full bg-lightergreen hover:bg-green p-2 rounded-md border-2 border-transparent peer-checked:bg-green peer-checked:border-solid peer-checked:border-black">
+                            gluten free
+                        </label>
+                    </li>
+
+                    <li>
+                        <input id="lf" type="checkbox" name="lactoseFree" class="peer hidden"> 
+                        <label for="lf" class="inline-table w-full bg-lightergreen hover:bg-green p-2 rounded-md border-2 border-transparent peer-checked:bg-green peer-checked:border-solid peer-checked:border-black">
+                            lactose free
+                        </label>
+                    </li>
+
+                    <li>
+                        <input id="vege" type="checkbox" name="vegetarian" class="peer hidden"> 
+                        <label for="vege" class="inline-table w-full bg-lightergreen hover:bg-green p-2 rounded-md border-2 border-transparent peer-checked:bg-green peer-checked:border-solid peer-checked:border-black">
+                            vegetarian
+                        </label>
+                    </li>
+
+                    <li>
+                        <input id="vegan" type="checkbox" name="vegan" class="peer hidden">
+                        <label for="vegan" class="inline-table w-full bg-lightergreen hover:bg-green p-2 rounded-md border-2 border-transparent peer-checked:bg-green peer-checked:border-solid peer-checked:border-black">
+                            vegan
+                        </label>
+                    </li>
+
+                    <li>
+                        
+                        <input type="checkbox" id="otherCheckbox" name="otherAllergy" onclick="toggleOtherInput()" class="peer hidden"> 
+                        <label for="otherCheckbox" class="inline-table w-full bg-lightergreen hover:bg-green p-2 rounded-md border-2 border-transparent peer-checked:bg-green peer-checked:border-solid peer-checked:border-black">
+                            other
+                            <input class="bg-green pl-2" type="text" id="otherInput" name="otherAllergyText" placeholder="Other Restrictions" style="display: none;" disabled>
+                        </label>
+                        
+                    </li>
+
+                </ul>
+            </fieldset>
         </div>
         <br>
-        <fieldset>
-            <legend>Food Restrictions</legend>
-            <label><input type="checkbox" name="nutAllergy"> Nut Allergy</label>
-            <label><input type="checkbox" name="glutenFree"> Gluten Free</label>
-            <label><input type="checkbox" name="lactoseFree"> Lactose Free</label>
-            <label><input type="checkbox" name="vegetarian"> Vegetarian</label>
-            <label><input type="checkbox" name="vegan"> Vegan</label>
-            <label>
-                <input type="checkbox" id="otherCheckbox" name="otherAllergy" onclick="toggleOtherInput()"> Other
-            </label>
-            <input type="text" id="otherInput" name="otherAllergyText" placeholder="Other Restrictions" disabled>
-        </fieldset>
         <br>
-        <div>
-            <input type="submit" value="Get Recipe">
+        <div class="grid place-items-center">
+            <div class="w-7/12">
+                <legend class="pb-5 font-bold">servings</legend>
+                <label for="servings"></label>
+                <input class="bg-green rounded-md max-w-28 p-3" type="number" id="servings" name="servings" min="1" required>
+            </div>
+            <br>
         </div>
+        <center>
+                <div class="w-7/12">
+                    <input type="submit" value="generate recipe" class="bg-light-blue font-bold border-2 border-black hover:bg-dark-blue transition ease-out duration-500 rounded-md p-3">
+                </div>
+        </center>
+        
     </form>
 </body>
 </html>

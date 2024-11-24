@@ -3,64 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./static/output.css" rel="stylesheet">
+    <link href="../static/output.css" rel="stylesheet">
     <title>Recipe</title>
 
     <style>
-        .changeingform {
-            display: none;
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
         }
+
+        .changeingform {
+            display: block;
+        } 
+        .outer{
+            display:none; 
+        }
+
+        #corner-image {
+            position: fixed; /* Keeps the image fixed in the corner even when scrolling */
+            bottom: 30px; /* Distance from the bottom of the page */
+            right: 40px; /* Distance from the right of the page */
+            width: 50px; /* Adjust the width of the image */
+            height: auto; /* Maintain aspect ratio */
+            z-index: 1000; /* Ensure it stays on top of other elements */
+        }
+
+        .container {
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            gap: 100px;
+            max-width: 100%;
+            padding: 0px;
+            margin: 0px;
+            padding-top:3%;
+        }
+
+        .box {
+            width: 400px;
+            flex-wrap:wrap;
+            text-align: left;
+        }
+
+        .box .inner-box {
+            width: 400px;
+            height: 350px;
+            border-radius: 2%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            border-width:10px;
+            border-style: solid;
+            padding-right:20px;
+            font-size:14px;
+        }
+
+        .box .inner-box ul li {
+            margin-bottom: 10px;
+        }
+
+        .box .inner-box ol li {
+            margin-bottom: 10px;
+        }
+        
+        .box .inner-box ol li::marker {
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            background-color: #D5EEFF; /* Initial background color */
+            color: black; /* Text color */
+            border: none; /* Removes default border */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 16px; /* Font size */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+            max-width:max-content;
+            font-weight:bold;
+            border-style:solid;
+        }
+
+        .btn-container {
+            display: flex; /* Use Flexbox */
+            align-items: center; /* Center horizontally */
+            justify-content: center; /* Center vertically */
+            gap: 10px;
+        }
+
+        .btn:hover {
+            background-color: #A5D6F9; /* Change background color on hover */
+        }
+        /* Media Queries for Smaller Screens */
+        @media (max-width: 900px) {
+
+            .container {
+                flex-direction: column; /* Stack boxes vertically */
+                gap: 15px;
+                padding-right:3%
+            }
+
+            .box .inner-box {
+                max-height: 250px; /* Reduce height for smaller screens */
+                font-size: 0.9rem; /* Adjust font size */
+            }
+
+            .btn {
+                padding: 10px 15px; /* Adjust button padding */
+                font-size: 0.9rem; /* Reduce font size */
+            }
+
+            #corner-image {
+                width: 30px; /* Scale down image */
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2rem; /* Further reduce title size */
+            }
+
+            .box {
+                width: 100%; /* Use full width */
+            }
+
+            .btn {
+                width: 100%; /* Make buttons full-width */
+                text-align: center;
+            }
+
+            #corner-image {
+                width: 25px; /* Further scale down image */
+            }
+        }
+
     </style>
 </head>
-<body>
+<body class="bg-beige">
     <div class="outer" id="outercontain">
-        <div>
-            <h2>{{ name|safe }}</h2>
-        </div>
-        <div>
-            <ul>
-                {{ ingredients|safe }}
-            </ul>
-        </div>
-        <div>
-            <ol>
-                {{ instructions|safe }}
-            </ol>
+        <div class="container">
+            <div class="box">
+                <h1>{{ name|safe }}</h1>  
+                <h3>ingredients</h3>
+                <div class="inner-box" style="background-color: #FFEAEA; border-color:#FFEAEA">
+                    <ul>
+                        {{ ingredients|safe }}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="box">
+                <h1 style="color:#FFF8EE">baked chicken</h1> 
+                <h3>instructions</h3>
+                <div class="inner-box" style="background-color: #CCECBF; border-color: #CCECBF ">
+                    <ol>
+                        {{ instructions|safe }}
+                    </ol>
+                </div>
+            </div>
         </div>
         <br>
     </div>
-    <div>
+    <br>
+    <div id="dbuttons">
         <form action="/recipe_submission" method="POST" name="changeform" class="changeingform" id="changeiform">
-            <div>
-                <label for="servings">Change the number of servings:</label>
-                {{ serving|safe }}
-            </div>
-            <div>
-                <h2>Select the ingredients you don't have or want to substitute out:</h2>
-                <fieldset>
+            <div class="items-center px-[18%] pt-[6%] inline-table">
+                <h2 class="text-3xl mb-12 font-bold rounded-lg max-w-fit items-center flex">replace ingredients and servings</h2>
+                <h1 class="font-bold text-xl">ingredients</h1>
+                <fieldset class="mb-8">
                     {{ checklist|safe }}
                 </fieldset>
+                <h1 class="text-xl font-bold">servings</h1>
+                <div class="pt-2">
+                    {{ serving|safe }}
+                </div>
             </div>
             <div style="visibility: hidden;">
                 {{ save_ingredients|safe }}
                 {{ save_instructions|safe }}
             </div>
+            <center>
             <div>
-                <input type="submit" value="Get New Recipe">
+                <input class="inline-block font-bold bg-light-blue hover:bg-dark-blue p-4 rounded-lg border-2 border-black transition-colors duration-250 cursor-pointer mx-4" type="submit" value="regenerate recipe">
+                <a class="inline-block font-bold bg-light-blue hover:bg-dark-blue p-4 rounded-lg border-2 border-black transition-colors duration-250 cursor-pointer" href="/">new recipe</a>
             </div>
+        </center>
         </form>
     </div>
-    <button onclick="selectIngredients()" id="change">Edit Ingredients and Serving Size</button>
-    <div>
-    <a href="/">Input Another Recipe</a>
+
+    <div class="btn-container" id="abuttons">
+        <div class="btn-box">
+            <button class="btn" onclick="selectIngredients()" id="change">modify recipe</button>
+        </div>
+        <br>
+        <div class="btn-box">
+            <a href="form.html" class="btn" style="text-decoration: none;">new recipe</a>
+        </div>
     </div>
+
+    <img id="corner-image" src="../static/dango3.png" alt="Corner Image" style="width: 35px">
+
+    <!--<button onclick="selectIngredients()" id="change">Edit Ingredients and Serving Size</button>-->
     <br>
     <script>
         function selectIngredients() {
             document.getElementById("changeiform").style.display = "block";
             document.getElementById("outercontain").style.display = "none";
             document.getElementById("change").style.display = "none";
+            document.getElementById("abuttons").style.display = "none";
         }
+        function toggleStrikeThrough(event, labelId) {
+            event.preventDefault();
+            const label = document.getElementById(labelId);
+            console.log(labelId);
+            document.getElementById("ingredient" + labelId.slice(-1)).checked ? document.getElementById("ingredient" + labelId.slice(-1)).checked = false : document.getElementById("ingredient" + labelId.slice(-1)).checked = true;
+            if (label.classList.contains('line-through')) {
+              label.classList.remove('line-through', 'text-gray-500', 'bg-pink', 'border-black');
+            } else {
+                label.classList.add('line-through', 'text-gray-500', 'bg-pink', 'border-black');
+            }
+        }  
     </script>
 </body>
 </html>
