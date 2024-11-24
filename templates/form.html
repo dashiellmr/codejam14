@@ -70,53 +70,43 @@
                 <legend class="font-bold">dietary restrictions</legend>
                 <br>
 
-                <ul class="grid grid-cols-3 gap-6">
-                    <li>
+                <div class="grid grid-cols-3 gap-6">
+                    <div>
                         <input id="nut" type="checkbox" name="nutAllergy" class="peer hidden">
                         <label for="nut" class="inline-table w-full bg-lightergreen hover:bg-green p-2 rounded-md border-2 border-transparent peer-checked:bg-green peer-checked:border-solid peer-checked:border-black">
                             nut free
                         </label>
-                    </li>
-
-                    <li>
+                    </div>
+                    <div>
                         <input id="gf" type="checkbox" name="glutenFree" class="peer hidden"> 
                         <label for="gf" class="inline-table w-full bg-lightergreen hover:bg-green p-2 rounded-md border-2 border-transparent peer-checked:bg-green peer-checked:border-solid peer-checked:border-black">
                             gluten free
                         </label>
-                    </li>
-
-                    <li>
+                    </div>
                         <input id="lf" type="checkbox" name="lactoseFree" class="peer hidden"> 
                         <label for="lf" class="inline-table w-full bg-lightergreen hover:bg-green p-2 rounded-md border-2 border-transparent peer-checked:bg-green peer-checked:border-solid peer-checked:border-black">
                             lactose free
                         </label>
-                    </li>
-
-                    <li>
+                        <div>
                         <input id="vege" type="checkbox" name="vegetarian" class="peer hidden"> 
                         <label for="vege" class="inline-table w-full bg-lightergreen hover:bg-green p-2 rounded-md border-2 border-transparent peer-checked:bg-green peer-checked:border-solid peer-checked:border-black">
                             vegetarian
                         </label>
-                    </li>
-
-                    <li>
+                    </div>
+                    <div>
                         <input id="vegan" type="checkbox" name="vegan" class="peer hidden">
                         <label for="vegan" class="inline-table w-full bg-lightergreen hover:bg-green p-2 rounded-md border-2 border-transparent peer-checked:bg-green peer-checked:border-solid peer-checked:border-black">
                             vegan
                         </label>
-                    </li>
-
-                    <li>
-                        
+                    </div>
+                    <div>
                         <input type="checkbox" id="otherCheckbox" name="otherAllergy" onclick="toggleOtherInput()" class="peer hidden"> 
                         <label for="otherCheckbox" class="inline-table w-full bg-lightergreen hover:bg-green p-2 rounded-md border-2 border-transparent peer-checked:bg-green peer-checked:border-solid peer-checked:border-black">
                             other
                             <input class="bg-green pl-2" type="text" id="otherInput" name="otherAllergyText" placeholder="Other Restrictions" style="display: none;" disabled>
                         </label>
-                        
-                    </li>
-
-                </ul>
+                    </div>
+                    </div>
             </fieldset>
         </div>
         <br>
