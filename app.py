@@ -69,7 +69,7 @@ def recipe_submission():
                 },
                 {
                     "role": "user",
-                    "content": "Please produce a recipe according to the above guidelines. Please put it in the format of a recipe card with the name at the top. Please don't write anything except the recipe and the instructions. Thank you!",
+                    "content": "Please produce a recipe according to the above guidelines. Please put it in the format of a recipe card with the name at the top. Please don't write anything except the recipe and the instructions. Thank you! Also, please make the title of the dish lowercase and use markdown to describe the list of ingredients (unordered list) and instructions (ordered list). Thanks!",
                 },
             ],
         )   
@@ -126,15 +126,17 @@ def recipe_submission():
             },
             {
                 "role": "user",
-                "content": "Please produce a recipe according to the above guidelines. Please put it in the format of a recipe card. Please don't write anything except the recipe and the instructions. Thank you!",
+                "content": "Please produce a recipe according to the above guidelines. Please put it in the format of a recipe card. Please don't write anything except the recipe and the instructions. Thank you! Also, please make the title of the dish in lowercase and use markdown to describe the list of ingredients (unordered list) and instructions (ordered list). Thanks!",
             },
         ],
     )
 
     gpt_response = response.choices[0].message.content
     formatted_html = marko.convert(gpt_response)
-    ingredients_list = formatted_html.split("<ul>")[1].split("</ul>")[0]
-    instructions_list = formatted_html.split("<ol>")[1].split("</ol>")[0]
+    if "<ul>" in formatted_html:
+        ingredients_list = formatted_html.split("<ul>")[1].split("</ul>")[0]
+    if "<ol>" in formatted_html:
+        instructions_list = formatted_html.split("<ol>")[1].split("</ol>")[0]
     name_of_recipe = formatted_html.split("\n")[0]
     name_of_recipe = re.sub(r"<[^>]+>", "", name_of_recipe)
 
