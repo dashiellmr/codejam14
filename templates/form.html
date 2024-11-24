@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../static/output.css" rel="stylesheet">
-    <title>Recipe Form</title>
+    <title>dangogo</title>
+    <link rel="icon" type="image/png" href="../static/tabdango.png">
+
     <style>
         #loading-container img {
             max-width: 150px;
@@ -17,6 +19,15 @@
 
         #page-container.fade-out {
             animation: fadeOut 1s forwards;
+        }
+
+        #corner-image {
+            position: fixed; /* Keeps the image fixed in the corner even when scrolling */
+            bottom: 30px; /* Distance from the bottom of the page */
+            right: 40px; /* Distance from the right of the page */
+            width: 50px; /* Adjust the width of the image */
+            height: auto; /* Maintain aspect ratio */
+            z-index: 1000; /* Ensure it stays on top of other elements */
         }
 
         @keyframes fadeOut {
@@ -140,9 +151,11 @@
         <img src="../static/gendango3.png" alt="Step 4" style="width:110px">
     </div>
     <center class="m-5">
-        <h1 id="title" class="font-bold text-7xl p-10">
+        
+        <h1 id="title" class="ml-14 font-bold text-7xl inline">
             dangogo
         </h1>
+        <img src="../static/dangologo.png" alt="Icon" class="title-icon max-w-12 pb-5 inline">
     </center>
     <form action="/recipe_submission" method="POST" id="mainform" name="mainform" class="recipeForm" onsubmit="handleSubmit(event)">
         <div class = " grid place-items-center">
@@ -208,7 +221,7 @@
             <div class="w-7/12">
                 <legend class="pb-5 font-bold">servings</legend>
                 <label for="servings"></label>
-                <input class="bg-green rounded-md max-w-28 p-3" type="number" id="servings" name="servings" min="1" required>
+                <input class="bg-lightergreen focus-within:bg-green rounded-md max-w-28 p-3" type="number" id="servings" name="servings" min="1" required>
             </div>
             <br>
         </div>
@@ -217,7 +230,7 @@
                     <input type="submit" value="generate recipe" class="bg-light-blue font-bold border-2 border-black hover:bg-dark-blue transition ease-out duration-500 rounded-md p-3">
                 </div>
         </center>
-        
     </form>
+    <img id="corner-image" src="../static/dango3.png" alt="Corner Image" style="width: 35px">
 </body>
 </html>
