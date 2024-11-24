@@ -3,6 +3,9 @@ module.exports = {
   content: ["./templates/**/*.{html,js}"],
   theme: {
     extend: {
+      fontFamily: {
+        inter: ['Inter', 'sans-serif'],
+      },
       colors: {
         'beige': '#FFF8EE',
         'pink': '#FFEAEA' ,
