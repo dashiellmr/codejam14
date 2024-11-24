@@ -124,21 +124,5 @@
         </center>
         
     </form>
-
-    <script>
-        document.getElementById("mainform").addEventListener("submit", function (event) {
-            event.preventDefault(); 
-
-            const formData = new FormData(this); 
-
-            // Redirect to loading page
-            window.location.href = "/generating";
-
-            fetch(this.action, {
-                method: this.method, 
-                body: formData 
-            });
-        });
-    </script>
 </body>
 </html>
