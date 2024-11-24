@@ -56,16 +56,17 @@
 
                 // Check if we're on the last image on the final loop
                 if (currentIndex === totalImages - 1 && loops >= maxLoops - 1) {
-                    clearInterval(loadingInterval); // Stop the switching
-                    setTimeout(() => {
-                    // Add the fade-out effect
-                    const pageContainer = document.getElementById("page-container");
-                    pageContainer.classList.add("fade-out");
+                    clearInterval(loadingInterval); // Stop the image switching
 
-                    // Redirect to the home page after the fade-out
                     setTimeout(() => {
-                        window.location.href = "./annie.html";
-                    }, 1000); // 1 second fade-out duration
+                        // Add the fade-out effect to the page container
+                        const pageContainer = document.getElementById("page-container");
+                        pageContainer.classList.add("fade-out");
+
+                        // Optional: Remove the fade-out class after the effect completes
+                        setTimeout(() => {
+                            pageContainer.classList.remove("fade-out");
+                        }, 1000); // 1 second fade-out duration
                     }, 5000); // Pause on the last image for 5 seconds
                 }
 

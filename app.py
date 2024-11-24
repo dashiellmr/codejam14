@@ -33,6 +33,11 @@ def render_home():
 def form():
     return render_template("form.html")
 
+@app.route("/generating")
+def generating():
+    return render_template("generatingrecipe.html")
+
+
 @app.route("/recipe_submission", methods=["POST"])
 def recipe_submission():
     print(request.form.get("recipeLink"))
