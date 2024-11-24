@@ -8,11 +8,14 @@
 
     <style>
         .changeingform {
-            display: none;
+            display: block;
+        } 
+        .outer{
+            display:none; 
         }
     </style>
 </head>
-<body>
+<body class="bg-beige">
     <div class="outer" id="outercontain">
         <div>
             <h2>Baked Chicken</h2>
@@ -46,52 +49,53 @@
     </div>
     <div>
         <form action="/recipe_submission" method="POST" name="changeform" class="changeingform" id="changeiform">
-            <div>
-                <label for="servings">Change the number of servings:</label>
-                <input type="number" id="servings" name="servings" min="1" value="4">
-            </div>
-            <div>
-                <h2>Select the ingredients you don't have or want to substitute out:</h2>
-                <fieldset>
-                    <label>
-                        <input type="checkbox" name="ingredient0">1 cup (240ml) whole milk, warmed to about 100°F (38°C)
+            <div class="items-center px-[18%] pt-[6%] inline-table">
+                <h2 class="text-3xl mb-12 font-bold rounded-lg max-w-fit items-center flex">replace ingredients and servings</h2>
+                <h1 class="font-bold text-xl">ingredients</h1>
+                <fieldset class="mb-8">
+                    <label for="ingredient0" class="hover:text-gray-500 p-4 rounded-lg bg-green max-w-fit border-2 border-gray-700 inline-block mr-2 cursor-pointer transition-colors duration-250" id="label0" onclick="toggleStrikeThrough('label0')">
+                        <input type="checkbox" name="ingredient0" class="hidden">1 cup (240ml) whole milk, warmed to about 100°F (38°C)
+                    </label>
+                    <label for="ingredient1" class="hover:text-gray-500 p-4 rounded-lg bg-green max-w-fit border-2 border-gray-700 inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id="label1" onclick="toggleStrikeThrough('label1')">
+                        <input type="checkbox" name="ingredient1" class="hidden">2/3 cup (135g) granulated sugar, divided
+                    </label>
+                    <label for="ingredient2" class="hover:text-gray-500 p-4 rounded-lg bg-green max-w-fit border-2 border-gray-700 inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id="label2" onclick="toggleStrikeThrough('label2')">                         
+                        <input type="checkbox" name="ingredient2" class="hidden">1 and 1/2 tablespoons (14g) active dry or instant yeast (2 standard size packets)
+                    </label>
+                    <label for="ingredient3" class="hover:text-gray-500 p-4 rounded-lg bg-green max-w-fit border-2 border-gray-700 inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id="label3" onclick="toggleStrikeThrough('label3')">
+                        <input type="checkbox" name="ingredient3" class="hidden">1/2 cup (8 tbsp; 113g) unsalted butter, softened to room temperature and cut into 4 pieces
+                    </label>
+                    <label for="ingredient4" class="hover:text-gray-500 p-4 rounded-lg bg-green max-w-fit border-2 border-gray-700 inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id="label4" onclick="toggleStrikeThrough('label4')">
+                        <input type="checkbox" name="ingredient4" class="hidden">2 large eggs, at room temperature
                       </label>
-                      <label>
-                        <input type="checkbox" name="ingredient1">2/3 cup (135g) granulated sugar, divided
-                        </label>
-                      <label>
-                         <input type="checkbox" name="ingredient2">1 and 1/2 tablespoons (14g) active dry or instant yeast (2 standard size packets)
+                      <label for="ingredient5" class="hover:text-gray-500 p-4 rounded-lg bg-green max-w-fit border-2 border-gray-700 inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id="label5" onclick="toggleStrikeThrough('label5')"> 
+                        <input type="checkbox" name="ingredient5" class="hidden">1/2 teaspoon salt
                       </label>
-                      <label>
-                        <input type="checkbox" name="ingredient3">1/2 cup (8 tbsp; 113g) unsalted butter, softened to room temperature and cut into 4 pieces
+                      <label for="ingredient6" class="hover:text-gray-500 p-4 rounded-lg bg-green max-w-fit border-2 border-gray-700 inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id="label6" onclick="toggleStrikeThrough('label6')">
+                        <input type="checkbox" name="ingredient6" class="hidden">4 and 1/2 cups (563g) gluten-free all-purpose flour, plus more as needed
                       </label>
-                      <label>
-                        <input type="checkbox" name="ingredient4">2 large eggs, at room temperature
-                      </label>
-                      <label>
-                        <input type="checkbox" name="ingredient5">1/2 teaspoon salt
-                      </label>
-                      <label>
-                        <input type="checkbox" name="ingredient6">4 and 1/2 cups (563g) gluten-free all-purpose flour, plus more as needed
-                      </label>
-                      <label>
-                        <input type="checkbox" name="ingredient7">2 teaspoons canola, vegetable, or olive oil for bowl (or use nonstick spray)
+                      <label for="ingredient7" class="hover:text-gray-500 p-4 rounded-lg bg-green max-w-fit border-2 border-gray-700 inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id="label7" onclick="toggleStrikeThrough('label7')">
+                        <input type="checkbox" name="ingredient7" class="hidden">2 teaspoons canola, vegetable, or olive oil for bowl (or use nonstick spray)
                       </label>
                 </fieldset>
+                <h1 class="text-xl font-bold">servings</h1>
+                <div class="pt-2">
+                    <input class="bg-green border-2 p-4 mb-6 border-black rounded-lg" type="number" id="servings" name="servings" min="1" placeholder="number of servings" required>
+                </div>
             </div>
             <div style="visibility: hidden;">
                 {{ save_ingredients|safe }}
                 {{ save_instructions|safe }}
             </div>
+            <center>
             <div>
-                <input type="submit" value="Get New Recipe">
+                <input class="inline-block font-bold bg-light-blue hover:bg-dark-blue p-4 rounded-lg border-2 border-black transition-colors duration-250 cursor-pointer" type="submit" value="regenerate recipe">
+                <a class="inline-block font-bold bg-light-blue hover:bg-dark-blue p-4 rounded-lg border-2 border-black transition-colors duration-250 cursor-pointer" href="/">new recipe</a>
             </div>
+        </center>
         </form>
     </div>
-    <button onclick="selectIngredients()" id="change">Edit Ingredients and Serving Size</button>
-    <div>
-    <a href="form.html">Input Another Recipe</a>
-    </div>
+    <button onclick="selectIngredients()" id="change" class="hidden">Edit Ingredients and Serving Size</button>
     <br>
     <script>
         function selectIngredients() {
@@ -99,6 +103,14 @@
             document.getElementById("outercontain").style.display = "none";
             document.getElementById("change").style.display = "none";
         }
+        function toggleStrikeThrough(labelId) {
+            const label = document.getElementById(labelId);
+            if (label.classList.contains('line-through')) {
+                label.classList.remove('line-through', 'text-gray-500', 'bg-pink');
+            } else {
+                label.classList.add('line-through', 'text-gray-500', 'bg-pink');
+            }
+        }  
     </script>
 </body>
 </html>

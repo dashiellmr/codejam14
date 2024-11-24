@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./static/output.css" rel="stylesheet">
+    <link href="../static/output.css" rel="stylesheet">
     <title>Recipe</title>
 
     <style>
@@ -31,29 +31,30 @@
     </div>
     <div>
         <form action="/recipe_submission" method="POST" name="changeform" class="changeingform" id="changeiform">
-            <div>
-                <label for="servings">Change the number of servings:</label>
-                {{ serving|safe }}
-            </div>
-            <div>
-                <h2>Select the ingredients you don't have or want to substitute out:</h2>
-                <fieldset>
+            <div class="items-center px-[18%] pt-[6%] inline-table">
+                <h2 class="text-3xl mb-12 font-bold rounded-lg max-w-fit items-center flex">replace ingredients and servings</h2>
+                <h1 class="font-bold text-xl">ingredients</h1>
+                <fieldset class="mb-8">
                     {{ checklist|safe }}
                 </fieldset>
+                <h1 class="text-xl font-bold">servings</h1>
+                <div class="pt-2">
+                    {{ serving|safe }}
+                </div>
             </div>
             <div style="visibility: hidden;">
                 {{ save_ingredients|safe }}
                 {{ save_instructions|safe }}
             </div>
+            <center>
             <div>
-                <input type="submit" value="Get New Recipe">
+                <input class="inline-block font-bold bg-light-blue hover:bg-dark-blue p-4 rounded-lg border-2 border-black transition-colors duration-250 cursor-pointer" type="submit" value="regenerate recipe">
+                <a class="inline-block font-bold bg-light-blue hover:bg-dark-blue p-4 rounded-lg border-2 border-black transition-colors duration-250 cursor-pointer" href="/">new recipe</a>
             </div>
+        </center>
         </form>
     </div>
     <button onclick="selectIngredients()" id="change">Edit Ingredients and Serving Size</button>
-    <div>
-    <a href="/">Input Another Recipe</a>
-    </div>
     <br>
     <script>
         function selectIngredients() {
@@ -61,6 +62,17 @@
             document.getElementById("outercontain").style.display = "none";
             document.getElementById("change").style.display = "none";
         }
+        function toggleStrikeThrough(event, labelId) {
+            event.preventDefault();
+            const label = document.getElementById(labelId);
+            console.log(labelId);
+            document.getElementById("ingredient" + labelId.slice(-1)).checked ? document.getElementById("ingredient" + labelId.slice(-1)).checked = false : document.getElementById("ingredient" + labelId.slice(-1)).checked = true;
+            if (label.classList.contains('line-through')) {
+              label.classList.remove('line-through', 'text-gray-500', 'bg-pink', 'border-black');
+            } else {
+                label.classList.add('line-through', 'text-gray-500', 'bg-pink', 'border-black');
+            }
+        }  
     </script>
 </body>
 </html>
