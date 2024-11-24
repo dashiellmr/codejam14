@@ -86,13 +86,13 @@ def recipe_submission():
         final_output = ""
         for i, ingre in enumerate(ingredients_list_no_format):
             label = "'label" + str(i) + "'"
-            a = f'<label for="ingredient{i}" class="hover:text-gray-500 p-4 rounded-lg bg-green max-w-fit border-2 border-green inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id={label} onclick="toggleStrikeThrough(event, {label})"><input type="checkbox" name="ingredient{i}" id="ingredient{i}" class="hidden">{ingre}</label>'
+            a = f'<label for="ingredient{i}" class="hover:text-gray-500 p-4 rounded-lg bg-lightergreen max-w-fit border-2 border-lightergreen inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id={label} onclick="toggleStrikeThrough(event, {label})"><input type="checkbox" name="ingredient{i}" id="ingredient{i}" class="hidden">{ingre}</label>'
             final_output = final_output + a
         
         save_ingredient_values = '<input type="text" id="ingredientshtml" name="ingredientshtml" value="' + ingredients_list + '">'
         save_instruction_values = '<input type="text" id="instructionshtml" name="instructionshtml" value="' + instructions_list + '">'
         serving_size = str(serving_size)
-        serving_size = f'<input class="bg-green p-4 mb-6 rounded-lg border-2 border-green" type="number" id="servings" name="servings" min="1" placeholder="number of servings" value="{serving_size}" required>'
+        serving_size = f'<input class="bg-lightergreen focus-within:bg-green p-4 rounded-lg border-2 border-green" type="number" id="servings" name="servings" min="1" placeholder="number of servings" value="{serving_size}" required>'
     
         query_params = urlencode({
             "ingredients": ingredients_list,
@@ -149,12 +149,12 @@ def recipe_submission():
     
     for i, ingre in enumerate(ingredients_list_no_format):
         label = "'label" + str(i) + "'"
-        a = f'<label for="ingredient{i}" class="hover:text-gray-500 p-4 rounded-lg bg-green max-w-fit border-2 border-green inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id={label} onclick="toggleStrikeThrough(event, {label})"><input type="checkbox" name="ingredient{i}" id="ingredient{i}" class="hidden">{ingre}</label>'
+        a = f'<label for="ingredient{i}" class="hover:text-gray-500 p-4 rounded-lg bg-lightergreen max-w-fit border-2 border-lightergreen inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id={label} onclick="toggleStrikeThrough(event, {label})"><input type="checkbox" name="ingredient{i}" id="ingredient{i}" class="hidden">{ingre}</label>'
         final_output = final_output + a
 
     save_ingredient_values = '<input type="text" id="ingredientshtml" name="ingredientshtml" value="' + ingredients_list + '">'
     save_instruction_values = '<input type="text" id="instructionshtml" name="instructionshtml" value="' + instructions_list + '">'
-    serving_size = f'<input class="bg-green border-2 p-4 mb-6 border-green rounded-lg" type="number" id="servings" name="servings" min="1" placeholder="number of servings" value="{str(number_of_people)}" required>'
+    serving_size = f'<input class="bg-lightergreen focus-within:bg-green border-2 p-4 mb-6 border-green rounded-lg" type="number" id="servings" name="servings" min="1" placeholder="number of servings" value="{str(number_of_people)}" required>'
     query_params = urlencode({
             "ingredients": ingredients_list,
             "instructions": instructions_list,

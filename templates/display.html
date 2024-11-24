@@ -209,7 +209,7 @@
                     {{ serving|safe }}
                 </div>
             </div>
-            <div style="visibility: hidden;">
+            <div class="hover:text-gray-500 border-lightergreen border-2 bg-lightergreen mr-2 my-2 p-8 mb-4"style="visibility: hidden;">
                 <div id="saved_ingredients">
                     {{ save_ingredients|safe }}
                 </div>
@@ -306,7 +306,7 @@
                     
                     let currentIndex = 0;
                     let loops = 0;
-                    const maxLoops = 6;
+                    const maxLoops = 20;
             
                     // Make the loading container visible
                     loadingContainer.style.display = "flex";
