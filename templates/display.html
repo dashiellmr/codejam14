@@ -68,9 +68,9 @@
             console.log(labelId);
             document.getElementById("ingredient" + labelId.slice(-1)).checked ? document.getElementById("ingredient" + labelId.slice(-1)).checked = false : document.getElementById("ingredient" + labelId.slice(-1)).checked = true;
             if (label.classList.contains('line-through')) {
-              label.classList.remove('line-through', 'text-gray-500', 'bg-pink');
+              label.classList.remove('line-through', 'text-gray-500', 'bg-pink', 'border-black');
             } else {
-                label.classList.add('line-through', 'text-gray-500', 'bg-pink');
+                label.classList.add('line-through', 'text-gray-500', 'bg-pink', 'border-black');
             }
         }  
     </script>
