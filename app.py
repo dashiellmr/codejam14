@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import os
 import re
+from urllib.parse import urlencode
 
 import cloudscraper
 import marko
@@ -11,6 +12,7 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from flask import Flask
 from flask import jsonify
+from flask import redirect
 from flask import render_template
 from flask import request
 from openai import OpenAI
@@ -29,44 +31,45 @@ def render_home():
 def form():
     return render_template("form.html")
 
-@app.route("/recipe_submission", methods=["POST"])
+@app.route("/display")
+def display():
+    ingredients = request.args.get("ingredients")
+    instructions = request.args.get("instructions")
+    name = request.args.get("name")
+    checklist = request.args.get("checklist")
+    save_ingredients = request.args.get("save_ingredients")
+    save_instructions = request.args.get("save_instructions")
+    serving = request.args.get("serving")
+    return render_template(
+        "display.html",
+        ingredients=ingredients,
+        instructions=instructions,
+        name=name,
+        checklist=checklist,
+        save_ingredients=save_ingredients,
+        save_instructions=save_instructions,
+        serving=serving,
+    )
+
+@app.route("/recipe_submission", methods=["GET", "POST"])
 def recipe_submission():
-    print(request.form.get("recipeLink"))
-    if not request.form.get("recipeLink"):
-        ingredients_html = request.form.get("ingredientshtml")
+    if request.json and not request.json.get("recipeLink", None):
+        ingredients_html = request.json.get("saved_ingredients")
         soup = BeautifulSoup(ingredients_html, "html.parser")
-        ingredients_list_notformed = [li.get_text(strip=True) for li in soup.find_all("li")]
-
-        instructions_html = request.form.get("instructionshtml")
-        serving_size = request.form.get("servings")
-        unwanted_ingredients = []
-
-        for i, ingreds in enumerate(ingredients_list_notformed):
-            if request.form.get('ingredient' + str(i)) == "on":
-                unwanted_ingredients.append(ingreds)
-
-        unwanted_ingredients = ", ".join(unwanted_ingredients)
-
-        print(ingredients_html)
-        print("\n")
-        print(unwanted_ingredients)
-        print("\n")
-        print(instructions_html)
-        print("\n")
-        print(serving_size)
-
-
+        instructions_html = request.json.get("saved_instructions")
+        serving_size = request.json.get("servings")
+        unwanted_ingredients = ", ".join(request.json.get("banned_ingredients"))
         response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=
             [
                 {
                     "role": "system",
-                    "content": "You're a chef and here is a recipe that you need to modify. You need to remove the following ingredients: " + unwanted_ingredients + ". You also need to adjust the recipe to serve " + serving_size + " people. Please make the necessary changes to the recipe. Thank you! " + ingredients_html + instructions_html,
+                    "content": "You're a chef and here is a recipe that you need to modify. You need to remove the following ingredients: " + unwanted_ingredients + ". You also need to adjust the recipe to serve " + serving_size + " people. Please make the necessary changes to the recipe. Thank you! " + ingredients_html + instructions_html
                 },
                 {
                     "role": "user",
-                    "content": "Please produce a recipe according to the above guidelines. Please put it in the format of a recipe card. Please don't write anything except the recipe and the instructions. Thank you!",
+                    "content": "Please produce a recipe according to the above guidelines. Please put it in the format of a recipe card with the name at the top. Please don't write anything except the recipe and the instructions. Thank you!",
                 },
             ],
         )   
@@ -80,13 +83,10 @@ def recipe_submission():
         soup = BeautifulSoup(ingredients_list, "html.parser")
         ingredients_list_no_format = [li.get_text(strip=True) for li in soup.find_all("li")]
 
-        label_start = '<label><input type="checkbox" name="'
-        label_end = '</label>'
         final_output = ""
-        name = "ingredient"
         for i, ingre in enumerate(ingredients_list_no_format):
-            a = f'<label for="ingredient{i}" class="hover:text-gray-500 p-4 rounded-lg bg-green max-w-fit inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id="label{i}" onclick="toggleStrikeThrough(\'label{i}\')"><input type="checkbox" id="ingredient{i}" name="ingredient{i}" class="hidden">{ingre}</label>'
-
+            label = "'label" + str(i) + "'"
+            a = f'<label for="ingredient{i}" class="hover:text-gray-500 p-4 rounded-lg bg-green max-w-fit border-2 border-green inline-block mr-2 my-2 cursor-pointer transition-colors duration-250" id={label} onclick="toggleStrikeThrough(event, {label})"><input type="checkbox" name="ingredient{i}" id="ingredient{i}" class="hidden">{ingre}</label>'
             final_output = final_output + a
         
         save_ingredient_values = '<input type="text" id="ingredientshtml" name="ingredientshtml" value="' + ingredients_list + '">'
@@ -94,27 +94,20 @@ def recipe_submission():
         serving_size = str(serving_size)
         serving_size = f'<input class="bg-green p-4 mb-6 rounded-lg border-2 border-green" type="number" id="servings" name="servings" min="1" placeholder="number of servings" value="{serving_size}" required>'
     
-        return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe, checklist=final_output, save_ingredients=save_ingredient_values, save_instructions=save_instruction_values, serving=serving_size)
+        query_params = urlencode({
+            "ingredients": ingredients_list,
+            "instructions": instructions_list,
+            "name": name_of_recipe,
+            "checklist": final_output,
+            "save_ingredients": save_ingredient_values,
+            "save_instructions": save_instruction_values,
+            "serving": serving_size,
+        })
+        return redirect(f"/display?{query_params}")
     
-    recipe_url = request.form.get("recipeLink")
-    number_of_people = request.form.get("servings")
-    dietary_restrictions = []
-    
-    if request.form.get('nutAllergy') == "on":
-        dietary_restrictions.append("Nut Allergy")
-    if request.form.get('glutenFree') == "on":
-        dietary_restrictions.append("Gluten Free")
-    if request.form.get('lactoseFree') == "on":
-        dietary_restrictions.append("Lactose Free")
-    if request.form.get('vegetarian') == "on":
-        dietary_restrictions.append("Vegetarian")
-    if request.form.get('vegan') == "on":
-        dietary_restrictions.append("Vegan")
-
-    if "otherAllergy" in request.form:
-        other_allergy = request.form.get('otherAllergyText', '').strip()
-        if other_allergy:
-            dietary_restrictions.append(other_allergy)
+    recipe_url = request.json.get("recipeLink")
+    number_of_people = request.json.get("servings")
+    dietary_restrictions = request.json.get("dietaryRestrictions")
     
     website_data = cloudscraper.create_scraper().get(recipe_url).text
     soup = BeautifulSoup(website_data, "html.parser")
@@ -160,7 +153,15 @@ def recipe_submission():
     save_ingredient_values = '<input type="text" id="ingredientshtml" name="ingredientshtml" value="' + ingredients_list + '">'
     save_instruction_values = '<input type="text" id="instructionshtml" name="instructionshtml" value="' + instructions_list + '">'
     serving_size = f'<input class="bg-green border-2 p-4 mb-6 border-green rounded-lg" type="number" id="servings" name="servings" min="1" placeholder="number of servings" value="{str(number_of_people)}" required>'
-    return render_template("display.html", ingredients=ingredients_list, instructions=instructions_list, name=name_of_recipe, checklist=final_output, save_ingredients=save_ingredient_values, save_instructions=save_instruction_values, serving=serving_size)
-
+    query_params = urlencode({
+            "ingredients": ingredients_list,
+            "instructions": instructions_list,
+            "name": name_of_recipe,
+            "checklist": final_output,
+            "save_ingredients": save_ingredient_values,
+            "save_instructions": save_instruction_values,
+            "serving": serving_size,
+        })
+    return redirect(f"/display?{query_params}")
 if __name__ == "__main__":
     app.run(debug=True, port=8080)

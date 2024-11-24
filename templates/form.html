@@ -6,6 +6,27 @@
     <link href="../static/output.css" rel="stylesheet">
     <title>Recipe Form</title>
     <style>
+        #loading-container img {
+            max-width: 150px;
+            max-height: 150px;
+            display: none; /* Initially hide all images */
+        }
+        #loading-container img.active {
+            display:block;
+        }
+
+        #page-container.fade-out {
+            animation: fadeOut 1s forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
     </style>
     <script>
         function toggleOtherInput() {
@@ -22,34 +43,108 @@
 
         function handleSubmit(event) {
             event.preventDefault();
-
+        
             const form = document.forms['mainform'];
             const recipeLink = form['recipeLink'].value;
             const servings = form['servings'].value;
-
+        
+            document.getElementById('mainform').style.display = "none";
+            document.getElementById('title').style.display = "none";
             console.log("Recipe Link:", recipeLink);
+            startLoadingScreen();
             console.log("Number of People:", servings);
-
+        
             const dietaryRestrictions = [];
             form.querySelectorAll('input[type="checkbox"]:checked').forEach((checkbox) => {
+                console.log(checkbox)
                 if (checkbox.name === 'otherAllergy' && form['otherAllergyText'].value) {
                     dietaryRestrictions.push(form['otherAllergyText'].value);
                 } else if (checkbox.name !== 'otherAllergy') {
-                    dietaryRestrictions.push(checkbox.nextSibling.nodeValue.trim());
+                    dietaryRestrictions.push(checkbox.name);
                 }
             });
-
-            console.log("Dietary Restrictions:", dietaryRestrictions);
+            console.log(dietaryRestrictions);
+            // Prepare data to send
+            const requestData = {
+                recipeLink,
+                servings,
+                dietaryRestrictions,
+            };
+        
+            // Make the POST request to /recipe_submission
+            fetch(`${window.location.origin}/recipe_submission`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then((response) => {
+                    if (response.redirected) {
+                        // Server returned a redirect
+                        window.location.href = response.url;
+                    } else if (response.ok) {
+                        console.log('Data submitted successfully');
+                    } else {
+                        console.error('Failed to submit data');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error during submission:', error);
+                });
+        
+            // Start the loading screen animation
+            function startLoadingScreen() {
+                const loadingContainer = document.getElementById("loading-container");
+                const images = loadingContainer.querySelectorAll("img");
+                const totalImages = images.length;
+                let currentIndex = 0;
+                let loops = 0;
+                const maxLoops = 6;
+        
+                // Make the loading container visible
+                loadingContainer.style.display = "flex";
+        
+                function switchImage() {
+                    // Remove active class from the current image
+                    images[currentIndex].classList.remove("active");
+        
+                    // Move to the next image
+                    currentIndex = (currentIndex + 1) % totalImages;
+        
+                    // Add active class to the new current image
+                    images[currentIndex].classList.add("active");
+        
+                    // Increment loops if we have cycled back to the first image
+                    if (currentIndex === 0) {
+                        loops++;
+                    }
+        
+                    // Stop the animation after maxLoops
+                    if (loops >= maxLoops) {
+                        clearInterval(loadingInterval);
+                        loadingContainer.style.display = "none"; // Hide the loading container
+                    }
+                }
+        
+                const loadingInterval = setInterval(switchImage, 500);
+            }
         }
-    </script>
+    </script>        
 </head>
 <body class="bg-beige">
+    <div id="loading-container" style="margin: 0; display: none; justify-content: center; align-items: center; height: 100vh;">
+        <img src="../static/dango0.png" alt="Step 1" style="width:110px" class="active">
+        <img src="../static/dango1.png" alt="Step 2" style="width:110px">
+        <img src="../static/dango2.png" alt="Step 3" style="width:110px">
+        <img src="../static/dango3.png" alt="Step 4" style="width:110px">
+    </div>
     <center class="m-5">
-        <h1 class = "font-bold text-7xl p-10">
+        <h1 id="title" class="font-bold text-7xl p-10">
             dangogo
         </h1>
     </center>
-    <form action="/recipe_submission" method="POST" id="mainform" name="mainform" class="recipeForm" onsubmit="loadingScreen(event)">
+    <form action="/recipe_submission" method="POST" id="mainform" name="mainform" class="recipeForm" onsubmit="handleSubmit(event)">
         <div class = " grid place-items-center">
             <div class="bg-pink m-4 w-7/12 rounded-md ">
                 <label for="recipeURLInput" class="relative block overflow-hidden rounded-md border border-none px-3 pt-3 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
