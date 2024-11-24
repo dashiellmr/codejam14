@@ -60,9 +60,7 @@
                 </span>
                 </label>
             </div>
-            <!-- <label for="recipeLink"></label>
-            <input class="bg-pink p-2 rounded-md"type="text" id="recipeLink" name="recipeLink" placeholder="insert recipe link" required>
-        -->
+
         </div>
         <br>
         <div class =" grid place-items-center">
@@ -128,19 +126,19 @@
     </form>
 
     <script>
-        function loadingScreen(event) {
+        document.getElementById("mainform").addEventListener("submit", function (event) {
             event.preventDefault(); 
 
-            window.location.href = '/generating';
+            const formData = new FormData(this); 
 
-            setTimeout(() => {
-                const form = document.getElementById('mainform');
-                fetch(form.action, {
-                    method: form.method,
-                    body: new FormData(form),
-                });
-            }, 11000);
-        }
+            // Redirect to loading page
+            window.location.href = "/generating";
+
+            fetch(this.action, {
+                method: this.method, 
+                body: formData 
+            });
+        });
     </script>
 </body>
 </html>
